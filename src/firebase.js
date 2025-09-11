@@ -12,23 +12,14 @@ import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, s
 
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyDmrtFN3zx8ESWMrp7jtyFIZ9iodpeBKnk",
+  authDomain: "fresh-basket-app-a1589.firebaseapp.com",
+  projectId: "fresh-basket-app-a1589",
+  storageBucket: "fresh-basket-app-a1589.firebasestorage.app",
+  messagingSenderId: "838352118166",
+  appId: "1:838352118166:web:2de35e20a9b8176551bdb7",
+  measurementId: "G-E7BXZKJ4MW"
 };
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDmrtFN3zx8ESWMrp7jtyFIZ9iodpeBKnk",
-//   authDomain: "fresh-basket-app-a1589.firebaseapp.com",
-//   projectId: "fresh-basket-app-a1589",
-//   storageBucket: "fresh-basket-app-a1589.firebasestorage.app",
-//   messagingSenderId: "838352118166",
-//   appId: "1:838352118166:web:2de35e20a9b8176551bdb7",
-//   measurementId: "G-E7BXZKJ4MW"
-// };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
