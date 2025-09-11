@@ -1,11 +1,34 @@
-import React from 'react'
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
+
+
+import Login from "./Components/Login";
+import Register from "./Components/Register";
+import CustomerDashboard from "./Components/CustomerDashboard";
+import VendorDashboard from "./Components/VendorDashboard";
+import AdminDashboard from "./Components/AdminDashboard";
+import RiderDashboard from "./Components/RiderDashboard";
 
 function App() {
+
   return (
-    <div>
-      Random Test
-    </div>
-  )
+    <>
+    <Router>
+      <Routes>
+        <Route path="/register" element= {<Register />} />
+        <Route path="/login" element= {<Login />} />
+        <Route path="/admin" element= {<AdminDashboard />} />
+        <Route path="/customer" element= {<CustomerDashboard />} />
+        <Route path="/vendor" element= {<VendorDashboard />} />
+        <Route path="/rider" element= {<RiderDashboard />} />
+
+        <Route path="/" element={<Navigate to="/login" />} />
+
+      </Routes>
+    </Router>
+    </>
+  );
 }
 
-export default App
+export default App;
