@@ -11,54 +11,52 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    try{
+    try {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const user = res.user;
 
-      const docRef = doc (db, 'users', user.uid);
+      const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()){
+      if (docSnap.exists()) {
         const role = docSnap.data().role;
 
-        if (role === 'admin'){
-          navigate('/admin');
-        } if (role === 'customer'){
-          navigate('/customer');
-        } if (role === 'vendor'){
-          navigate('/vendor');
-        } if (role === 'rider'){
-          navigate('/rider');
-        } else{
-          alert('Role not assigned. Contact admin.');
+        if (role === "admin") {
+          navigate("/admin");
+        } else if (role === "customer") {
+          navigate("/customer");
+        } else if (role === "vendor") {
+          navigate("/vendor");
+        } else if (role === "rider") {
+          navigate("/rider");
+        } else {
+          alert("Role not assigned. Contact admin.");
         }
-      }else{
-        alert('No user data found.');
+      } else {
+        alert("No user data found.");
       }
-    }catch(error){
+    } catch (error) {
       alert(error.message);
     }
   };
 
   return (
     <>
-      
-        <input
-          type="email"
-          placeholder="Janedoe@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleLogin}>Login</button>
+      <input
+        type="email"
+        placeholder="Janedoe@gmail.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Login</button>
 
-        <p>
-          Don’t have an account? <Link to="/register">Register here</Link>
-        </p>
-      
+      <p>
+        Don’t have an account? <Link to="/register">Register here</Link>
+      </p>
     </>
   );
 }
