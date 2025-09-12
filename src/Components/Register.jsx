@@ -4,6 +4,7 @@ import { setUserRole, auth } from "../firebase";
 import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import video1 from "../assets/landing2.mp4"
 
 const db =getFirestore();
 
@@ -50,7 +51,7 @@ function Register() {
     playsInline
     className="absolute top-0 left-0 w-full h-full object-cover opacity-90"
   >
-    <source src="src/assets/landing2.mp4" type="video/mp4" />
+    <source src={ video1 } type="video/mp4" />
     Your browser does not support the video tag.
   </video>
   

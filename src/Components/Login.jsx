@@ -3,6 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
+import login3 from "../assets/login3.avif"
+import login1 from "../assets/login.avif"
+import login2 from "../assets/login2.avif"
+import login4 from "../assets/login4.avif"
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,10 +16,10 @@ function Login() {
 
   // Background images for carousel
   const images = [
-    "src/assets/login3.avif",
-    "src/assets/login.avif",
-    "src/assets/login2.avif",
-    "src/assets/login4.avif",
+    login3,
+    login1,
+    login2,
+    login4
   ];
 
   // Changing background
