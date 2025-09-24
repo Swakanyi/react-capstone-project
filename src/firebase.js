@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, setDoc,getDoc } from "firebase/firestore"
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, setDoc, getDoc, query, where } from "firebase/firestore"
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -15,7 +16,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDmrtFN3zx8ESWMrp7jtyFIZ9iodpeBKnk",
   authDomain: "fresh-basket-app-a1589.firebaseapp.com",
   projectId: "fresh-basket-app-a1589",
-  storageBucket: "fresh-basket-app-a1589.firebasestorage.app",
+  storageBucket: "fresh-basket-app-a1589.appspot.com",
   messagingSenderId: "838352118166",
   appId: "1:838352118166:web:2de35e20a9b8176551bdb7",
   measurementId: "G-E7BXZKJ4MW"
@@ -25,6 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app)
  
 // export const registerUser = (email, password) => createUserWithEmailAndPassword (auth, email, password);
 // export const loginUser = (email, password) => signInWithEmailAndPassword(auth, email, password);
@@ -48,11 +50,37 @@ export const getUserRole = async (userId) => {
     }
 };
 //products
-export const addProduct = (product) => addDoc(productsCollection, product);
+export const addProduct = async (product) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not logged in");
+
+  try {
+    return await addDoc(productsCollection, {
+      ...product,
+      vendorId: user.uid,
+      createdAt: new Date(),
+    });
+  } catch (error) {
+    console.error("Error adding product:", error);
+    throw error;
+  }
+};
 export const getProducts = async () =>{
     const snapshot = await getDocs(productsCollection);
     return snapshot.docs.map(doc => ({id: doc.id, ...doc.data() }));
 };
+//for vendor dashboard
+export const getVendorProducts = async (vendorId) => {
+  try {
+    const q = query(productsCollection, where("vendorId", "==", vendorId));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error fetching vendor products:", error);
+    return [];
+  }
+};
+
 export const updateProduct = (id, product) => updateDoc (doc(db, 'products', id), product);
 
 export const deleteProduct = (id) => deleteDoc(doc(db, 'products', id));
@@ -66,3 +94,19 @@ export const getOrders = async () =>{
 export const updateOrder = (id, order) => updateDoc (doc(db, 'orders', id), order);
 
 export const deleteOrder = (id) => deleteDoc(doc(db, 'orders', id));
+
+//to upload product image to FireBase
+export const uploadProductImage = async (file) => {
+  if (!file) return null;
+
+  try {
+    const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    console.log("Uploaded image URL:", url); // ✅ debug
+    return url;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+};

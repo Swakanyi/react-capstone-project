@@ -57,15 +57,18 @@ function Login() {
     <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
      
       <div className="absolute inset-0 flex justify-center items-center">
-        <img
-          src={images[currentImage]}
-          alt="background"
-          className="w-[1000px] h-[600px] object-cover rounded-xl shadow-lg transition-opacity duration-1000 ease-in-out"
-          key={currentImage}
-        />
-        
-        
-      </div>
+  {images.map((img, index) => (
+    <img
+      key={index}
+      src={img}
+      alt="background"
+      className={`absolute w-[1000px] h-[600px] object-cover rounded-xl shadow-lg transition-opacity duration-2000 ease-in-out
+        ${index === currentImage ? "opacity-100" : "opacity-0"}`}
+      style={{ transitionDelay: index === currentImage ? "0ms" : "0ms" }}
+    />
+  ))}
+</div>
+
 
       <div className="relative z-10 w-96 p-8 bg-white/20 backdrop-blur-md rounded-2xl shadow-xl border border-white/30">
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">

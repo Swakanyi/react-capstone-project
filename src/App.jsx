@@ -10,6 +10,7 @@ import VendorDashboard from "./Components/VendorDashboard";
 import AdminDashboard from "./Components/AdminDashboard";
 import RiderDashboard from "./Components/RiderDashboard";
 
+
 function App() {
 
   return (
@@ -27,6 +28,7 @@ function App() {
 
       </Routes>
     </Router>
+    
     </>
   );
 }

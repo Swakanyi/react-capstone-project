@@ -58,7 +58,7 @@ function Register() {
 
       <div className="relative z-10 w-120 rounded-xl border border-white/30 bg-white/20 shadow-xl backdrop-blur-md">
         <div className="p-8">
-          <h2 className="text-3xl font-bold text-center">Register</h2>
+          <h2 className="text-4xl font-bold text-center">Register</h2>
 
           <input
             type="text"
