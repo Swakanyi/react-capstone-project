@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Footer() {
   return (
@@ -7,7 +8,14 @@ function Footer() {
   <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
     
     <div>
-      <img src="/images/FreshBasket Logo with Fresh Greens and Sunny Yellows.png" width="100" height="120" alt="logo" />
+      <Link to="/homepage">
+  <img
+    src="/images/FreshBasket Logo with Fresh Greens and Sunny Yellows.png"
+    width="100"
+    height="120"
+    alt="logo"
+  />
+</Link>
       <p className="font-semibold">Hand-selected Vegetables & Fruits For You.</p>
       
     </div>

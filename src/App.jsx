@@ -9,6 +9,8 @@ import CustomerDashboard from "./Components/CustomerDashboard";
 import VendorDashboard from "./Components/VendorDashboard";
 import AdminDashboard from "./Components/AdminDashboard";
 import RiderDashboard from "./Components/RiderDashboard";
+import Homepage from "./Components/Homepage";
+
 
 
 function App() {
@@ -23,11 +25,13 @@ function App() {
         <Route path="/customer" element= {<CustomerDashboard />} />
         <Route path="/vendor" element= {<VendorDashboard />} />
         <Route path="/rider" element= {<RiderDashboard />} />
+        <Route path="/homepage" element={<Homepage />} />
 
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/homepage" />} />
 
       </Routes>
     </Router>
+    
     
     </>
   );

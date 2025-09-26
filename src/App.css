@@ -1,1 +1,38 @@
+/* swiper arrows */
+.custom-swiper .swiper-button-prev,
+.custom-swiper .swiper-button-next {
+  color: #15803d; 
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.custom-swiper .swiper-button-prev {
+  left: -40px; 
+}
+
+.custom-swiper .swiper-button-next {
+  right: -40px; 
+}
+
+.custom-swiper .swiper-button-prev::after,
+.custom-swiper .swiper-button-next::after {
+  font-size: 14px; 
+  font-weight: bold;
+}
+
+.tangerine-regular {
+  font-family: "Tangerine", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tangerine-bold {
+  font-family: "Tangerine", cursive;
+  font-weight: 700;
+  font-style: normal;
+}
+
 

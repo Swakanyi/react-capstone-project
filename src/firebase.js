@@ -2,7 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, setDoc, getDoc, query, where } from "firebase/firestore"
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage } from "firebase/storage";
+
 
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -95,18 +96,19 @@ export const updateOrder = (id, order) => updateDoc (doc(db, 'orders', id), orde
 
 export const deleteOrder = (id) => deleteDoc(doc(db, 'orders', id));
 
-//to upload product image to FireBase
-export const uploadProductImage = async (file) => {
-  if (!file) return null;
+// //to upload product image to FireBase
+// export const uploadProductImage = async (file) => {
+//   if (!file) return null; // no file selected
 
-  try {
-    const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    console.log("Uploaded image URL:", url); // ✅ debug
-    return url;
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    throw error;
-  }
-};
+//   try {
+//     const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+//     await uploadBytes(storageRef, file);
+
+//     // Get public URL after upload
+//     const downloadURL = await getDownloadURL(storageRef);
+//     return downloadURL;
+//   } catch (error) {
+//     console.error("Error uploading image:", error);
+//     throw error;
+//   }
+// };
