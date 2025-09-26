@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 function ChatBot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! I'm your FreshBasket assistant. How can I help you today?" }
+    { role: "assistant", content: "Hi! I'm your FreshBasket AI assistant. How can I help you today?" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,37 +21,31 @@ function ChatBot() {
     setInput("");
     setLoading(true);
 
-    // Add user message immediately
+    // Add user message
     setMessages(prev => [...prev, { role: "user", content: userMessage }]);
 
     try {
-      // Call your API endpoint
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: userMessage }),
+      // Call OpenAI API
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are a helpful AI assistant for FreshBasket." },
+          ...messages,
+          { role: "user", content: userMessage }
+        ],
       });
 
-      const data = await response.json();
+      const reply = response.choices[0].message.content;
 
-      if (response.ok) {
-        setMessages(prev => [
-          ...prev,
-          { role: "assistant", content: data.reply }
-        ]);
-      } else {
-        setMessages(prev => [
-          ...prev,
-          { role: "assistant", content: data.error || "Sorry, something went wrong. Please try again." }
-        ]);
-      }
-    } catch (error) {
-      console.error('Chat error:', error);
       setMessages(prev => [
         ...prev,
-        { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again later." }
+        { role: "assistant", content: reply }
+      ]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      setMessages(prev => [
+        ...prev,
+        { role: "assistant", content: "Sorry, something went wrong. Please try again later." }
       ]);
     } finally {
       setLoading(false);
@@ -53,7 +53,7 @@ function ChatBot() {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -61,7 +61,7 @@ function ChatBot() {
 
   const clearChat = () => {
     setMessages([
-      { role: "assistant", content: "Hi! I'm your FreshBasket assistant. How can I help you today?" }
+      { role: "assistant", content: "Hi! I'm your FreshBasket AI assistant. How can I help you today?" }
     ]);
   };
 
@@ -69,12 +69,22 @@ function ChatBot() {
     <div>
       {/* Floating button */}
       <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg transition-colors z-50"
-        aria-label="Toggle chat"
-      >
-        {open ? '✕' : '💬'}
-      </button>
+  onClick={() => setOpen(!open)}
+  className="fixed bottom-5 right-10  hover:bg-blue-700 text-white p-4  shadow-lg transition-colors z-50"
+  aria-label="Toggle chat"
+>
+  {open ? (
+    "✕"
+  ) : (
+    <img
+      width={60}
+      height={60}
+      src="https://img.icons8.com/3d-fluency/94/speech-bubble-with-dots.png"
+      alt="speech-bubble-with-dots"
+    />
+  )}
+</button>
+
 
       {/* Chat window */}
       {open && (
@@ -88,7 +98,7 @@ function ChatBot() {
                 className="text-white hover:text-gray-200 text-sm"
                 title="Clear chat"
               >
-                🗑️
+                <img width="25" height="25" src="https://img.icons8.com/windows/32/waste.png" alt="waste"/>
               </button>
               <button
                 onClick={() => setOpen(false)}
@@ -118,14 +128,14 @@ function ChatBot() {
                 </div>
               </div>
             ))}
-            
+
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg text-sm">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
                   </div>
                 </div>
               </div>
@@ -148,7 +158,7 @@ function ChatBot() {
                 disabled={loading || !input.trim()}
                 className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm transition-colors"
               >
-                {loading ? '...' : 'Send'}
+                {loading ? "..." : "Send"}
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-2 text-center">
