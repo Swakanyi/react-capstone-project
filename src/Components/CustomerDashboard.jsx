@@ -723,7 +723,7 @@ const completeOrder = async () => {
 {/* Delivery Address & Order Summary Modal */}
 {showAddressModal && (
   <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div className="bg-white rounded-xl w-full max-w-md max-h-[75vh] overflow-hidden flex flex-col">
+    <div className="bg-white rounded-xl w-full max-w-md max-h-[60vh] overflow-hidden flex flex-col">
       
      
       <div className="p-6 border-b">
@@ -748,7 +748,7 @@ const completeOrder = async () => {
             <input
               type="text"
               required
-              placeholder="e.g., 123 Kimathi Street"
+              placeholder=" 123 Kimathi Street"
               value={deliveryAddress.addressLine1}
               onChange={(e) => setDeliveryAddress({...deliveryAddress, addressLine1: e.target.value})}
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -759,7 +759,7 @@ const completeOrder = async () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Apartment/Building (Optional)</label>
             <input
               type="text"
-              placeholder="e.g., Apartment 4B, Floor 2"
+              placeholder=" Apartment 4B, Floor 2"
               value={deliveryAddress.addressLine2}
               onChange={(e) => setDeliveryAddress({...deliveryAddress, addressLine2: e.target.value})}
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -772,7 +772,7 @@ const completeOrder = async () => {
               <input
                 type="text"
                 required
-                placeholder="e.g., Nairobi"
+                placeholder=" Nairobi"
                 value={deliveryAddress.city}
                 onChange={(e) => setDeliveryAddress({...deliveryAddress, city: e.target.value})}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -783,7 +783,7 @@ const completeOrder = async () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
               <input
                 type="text"
-                placeholder="e.g., 00100"
+                placeholder=" 00100"
                 value={deliveryAddress.postalCode}
                 onChange={(e) => setDeliveryAddress({...deliveryAddress, postalCode: e.target.value})}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -796,7 +796,7 @@ const completeOrder = async () => {
             <input
               type="tel"
               required
-              placeholder="e.g., +254712345678"
+              placeholder=" +254712345678"
               value={deliveryAddress.phoneNumber}
               onChange={(e) => setDeliveryAddress({...deliveryAddress, phoneNumber: e.target.value})}
               className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
