@@ -18,6 +18,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Footer from "./Footer";
+import freshLogo from "../assets/FreshBasket Logo with Fresh Greens and Sunny Yellows.png"
 
 function Homepage() {
   const [allProducts, setAllProducts] = useState([]);
@@ -390,7 +391,7 @@ function Homepage() {
         {/* FAQ section */}
         <section
   className="py-12 bg-gray-50 bg-cover bg-center bg-no-repeat"
-  style={{ backgroundImage: "url('public/images/FreshBasket Logo with Fresh Greens and Sunny Yellows.png')" }}
+  style={{ backgroundImage: `url(${freshLogo})` }}
 >
   <div className="max-w-4xl mx-auto px-6 bg-white/70 rounded-xl shadow-lg">
     <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-black">
