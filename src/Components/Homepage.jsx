@@ -256,7 +256,7 @@ function Homepage() {
     />
 
     
-    <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/50 to-transparent"></div>
+    <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/30 to-transparent"></div>
 
     
     <div className="relative z-10 flex flex-col justify-center h-full px-8  md:px-12 lg:px-16 max-w-xl">
@@ -306,7 +306,13 @@ function Homepage() {
                 <h2 className="mt-4 text-lg font-semibold text-gray-800">
                   {item.name}
                 </h2>
-                <p className="text-green-700 font-bold">Ksh {item.price}</p>
+                <p className="text-green-700 font-bold mb-4">Ksh {item.price}</p>
+                <button
+                  onClick={() => handleAddToCart(item)}
+                  className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                >
+                  Add to Cart
+                </button>
               </div>
             </SwiperSlide>
           ))}

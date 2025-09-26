@@ -98,7 +98,7 @@ function VendorDashboard() {
     formData.append("upload_preset", UPLOAD_PRESET);
 
     try {
-      // 1. Upload image to Cloudinary
+      // Upload image to Cloudinary
       const uploadResponse = await fetch(API_URL, {
         method: "POST",
         body: formData,

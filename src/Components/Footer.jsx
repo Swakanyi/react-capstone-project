@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import freshlogo from "../assets/FreshBasket Logo with Fresh Greens and Sunny Yellows.png"
 
 function Footer() {
   return (
@@ -10,7 +11,7 @@ function Footer() {
     <div>
       <Link to="/homepage">
   <img
-    src="/images/FreshBasket Logo with Fresh Greens and Sunny Yellows.png"
+    src={ freshlogo}
     width="100"
     height="120"
     alt="logo"

@@ -10,6 +10,7 @@ import VendorDashboard from "./Components/VendorDashboard";
 import AdminDashboard from "./Components/AdminDashboard";
 import RiderDashboard from "./Components/RiderDashboard";
 import Homepage from "./Components/Homepage";
+import ChatBot from "./Components/ChatBot";
 
 
 
@@ -31,6 +32,7 @@ function App() {
 
       </Routes>
     </Router>
+    <ChatBot />
     
     
     </>
