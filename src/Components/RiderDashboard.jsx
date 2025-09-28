@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { getOrders, updateOrder } from "../firebase";
+import Footer from "./Footer";
 
 function RiderDashboard() {
   const [orders, setOrders] = useState([]);
@@ -64,14 +65,14 @@ function RiderDashboard() {
 
     const todayEarnings = deliveredOrders
       .filter(order => new Date(order.updatedAt).toDateString() === today)
-      .reduce((sum, order) => sum + (order.deliveryFee || 50), 0); // Default delivery fee: 50 KSh
+      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0); 
 
     const weekEarnings = deliveredOrders
       .filter(order => new Date(order.updatedAt) >= weekAgo)
-      .reduce((sum, order) => sum + (order.deliveryFee || 50), 0);
+      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0);
 
     const totalEarnings = deliveredOrders
-      .reduce((sum, order) => sum + (order.deliveryFee || 50), 0);
+      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0);
 
     setEarnings({
       today: todayEarnings,
@@ -190,6 +191,7 @@ function RiderDashboard() {
   }
 
   return (
+    <>
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-lg">
@@ -431,7 +433,7 @@ function RiderDashboard() {
           {/* Orders Tabs Content */}
           {(activeTab === "available" || activeTab === "active" || activeTab === "completed") && (
             <div>
-              {/* Search Bar */}
+              
               <div className="bg-white rounded-lg shadow-md p-4 mb-6">
                 <input
                   type="text"
@@ -557,6 +559,8 @@ function RiderDashboard() {
         </div>
       </div>
     </div>
+    <Footer />
+   </>
   );
 }
 

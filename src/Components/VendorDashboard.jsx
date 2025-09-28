@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   auth,
   addProduct,
+  updateProduct,
   getVendorProducts,
   getOrders,
   updateOrder,
@@ -10,8 +11,8 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 
-const CLOUD_NAME = "dh3nh9mck"; 
-const UPLOAD_PRESET = "fresh-basket"; 
+const CLOUD_NAME = "dh3nh9mck";
+const UPLOAD_PRESET = "fresh-basket";
 const API_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
 function VendorDashboard() {
@@ -30,6 +31,9 @@ function VendorDashboard() {
     unit: "",
     imageFile: null,
   });
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const navigate = useNavigate();
 
   // Categories dropdown
@@ -64,12 +68,63 @@ function VendorDashboard() {
 
       setProducts(productsData || []);
 
-      // Filter orders for this vendor
+      
+      console.log("Current vendor UID:", auth.currentUser.uid);
+      console.log("Total orders fetched:", ordersData?.length);
+      console.log("Sample order structure:", ordersData?.[0]);
+
+      
+      ordersData?.forEach((order, index) => {
+        console.log(`Order ${index}:`, {
+          id: order.id,
+          items: order.items,
+          itemsType: typeof order.items,
+          isArray: Array.isArray(order.items),
+          itemsLength: order.items?.length,
+        });
+      });
+
+      
+      const allVendorIds =
+        ordersData?.reduce((acc, order) => {
+          if (Array.isArray(order.items)) {
+            const vendorIds = order.items
+              .map((item) => item.vendorId)
+              .filter(Boolean);
+            return [...acc, ...vendorIds];
+          }
+          return acc;
+        }, []) || [];
+
+      console.log("All vendor IDs in orders:", [...new Set(allVendorIds)]);
+
+      
       const vendorOrders =
-        ordersData?.filter((order) =>
-          order.items?.some((item) => item.vendorId === auth.currentUser.uid)
-        ) || [];
-      setOrders(vendorOrders);
+        ordersData?.filter((order) => {
+          
+          if (!Array.isArray(order.items)) {
+            console.log(`Order ${order.id} has invalid items:`, order.items);
+            return false;
+          }
+
+          return order.items.some((item) => {
+            console.log(
+              `Checking item: ${item.name}, vendorId: ${
+                item.vendorId
+              }, matches: ${item.vendorId === auth.currentUser.uid}`
+            );
+            return item.vendorId === auth.currentUser.uid;
+          });
+        }) || [];
+
+      console.log("Filtered vendor orders:", vendorOrders.length);
+      console.log("Vendor orders:", vendorOrders);
+
+      const sortedVendorOrders = vendorOrders.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      setOrders(sortedVendorOrders);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -85,7 +140,6 @@ function VendorDashboard() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
-   
     if (!newProduct.name || !newProduct.price || !newProduct.imageFile) {
       alert("Name, Price, and Image are required!");
       return;
@@ -224,7 +278,7 @@ function VendorDashboard() {
   };
 
   if (loading) {
-    return (
+        return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
         <span className="ml-3 text-gray-600">Loading dashboard...</span>
@@ -232,14 +286,62 @@ function VendorDashboard() {
     );
   }
 
+  // Add delete product function
+  const handleDeleteProduct = async (productId, productName) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete "${productName}"? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+     
+      await deleteProduct(productId);
+      alert("Product deleted successfully!");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Failed to delete product: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add edit product function
+  const handleEditProduct = async (productData) => {
+    try {
+      setLoading(true);
+      
+      await updateProduct(editingProduct.id, {
+        ...productData,
+        price: Number(productData.price),
+        stock: Number(productData.stock),
+        updatedAt: new Date(),
+      });
+      alert("Product updated successfully!");
+      setShowEditModal(false);
+      setEditingProduct(null);
+      fetchData();
+    } catch (error) {
+      console.error("Error updating product:", error);
+      alert("Failed to update product: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-  <div className="flex h-screen bg-gray-100">
-    {/* Sidebar */}
-    <div className="w-64 bg-white shadow-lg">
-      <div className="p-6 border-b">
-      <div className="flex items-center">
-        <div className="w-15 h-15 text-lg bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
+  
+      <div className="flex h-screen bg-gray-100">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-lg">
+          <div className="p-6 border-b">
+            <div className="flex items-center">
+              <div className="w-15 h-15 text-lg bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
                 {getVendorName().charAt(0)}
               </div>
               <div className="ml-3">
@@ -316,7 +418,6 @@ function VendorDashboard() {
 
         {/* Main */}
         <div className="flex-1 overflow-auto">
-          
           <div className="bg-white shadow-sm border-b px-6 py-4">
             <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold text-gray-800">
@@ -340,7 +441,6 @@ function VendorDashboard() {
             {/* Dashboard Tab */}
             {activeTab === "dashboard" && (
               <div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                   <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
                     <div className="flex items-center">
@@ -601,8 +701,30 @@ function VendorDashboard() {
                       {products.map((product) => (
                         <div
                           key={product.id}
-                          className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                          className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative"
                         >
+                          
+                          <div className="absolute top-2 right-2 flex gap-2">
+  <button
+    onClick={() => {
+      setEditingProduct(product);
+      setShowEditModal(true);
+    }}
+    className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors shadow-sm text-sm"
+  >
+    Edit
+  </button>
+
+  <button
+    onClick={() => handleDeleteProduct(product.id, product.name)}
+    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors shadow-sm text-sm"
+  >
+    Delete
+  </button>
+</div>
+
+
+                          
                           {product.imageUrl && (
                             <img
                               src={product.imageUrl}
@@ -611,8 +733,9 @@ function VendorDashboard() {
                             />
                           )}
 
+                          
                           <div className="space-y-2">
-                            <h4 className="font-semibold text-lg">
+                            <h4 className="font-semibold text-lg pr-16">
                               {product.name}
                             </h4>
                             <p className="text-sm text-gray-500">
@@ -644,6 +767,8 @@ function VendorDashboard() {
                                 {product.stock} in stock
                               </span>
                             </div>
+
+                            
                           </div>
                         </div>
                       ))}
@@ -653,10 +778,112 @@ function VendorDashboard() {
               </div>
             )}
 
+        
+     {/* Edit Product Modal */}
+{showEditModal && editingProduct && (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-semibold">Edit Product</h3>
+          <button
+            onClick={() => {
+              setShowEditModal(false);
+              setEditingProduct(null);
+            }}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const productData = Object.fromEntries(formData.entries());
+          handleEditProduct(productData);
+        }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              name="name"
+              type="text"
+              defaultValue={editingProduct.name}
+              placeholder="Product Name"
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              required
+            />
+            <input
+              name="price"
+              type="number"
+              defaultValue={editingProduct.price}
+              placeholder="Price (Ksh)"
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              required
+            />
+            <select
+              name="category"
+              defaultValue={editingProduct.category}
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <input
+              name="subcategory"
+              type="text"
+              defaultValue={editingProduct.subcategory}
+              placeholder="Subcategory"
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+            <input
+              name="stock"
+              type="number"
+              defaultValue={editingProduct.stock}
+              placeholder="Stock Quantity"
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+            <input
+              name="unit"
+              type="text"
+              defaultValue={editingProduct.unit}
+              placeholder="Unit (e.g. 1kg, 500ml)"
+              className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+
+          <div className="flex gap-3 mt-6">
+            <button
+              type="button"
+              onClick={() => {
+                setShowEditModal(false);
+                setEditingProduct(null);
+              }}
+              className="flex-1 py-3 px-4 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-3 px-4 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors font-medium"
+            >
+              Update Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}     
+
             {/* Orders Tab */}
             {activeTab === "orders" && (
               <div>
-                
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1">
@@ -810,7 +1037,6 @@ function VendorDashboard() {
                             </div>
                           </div>
 
-                         
                           <div className="flex flex-wrap gap-2">
                             {order.status === "pending" && (
                               <>
@@ -899,7 +1125,6 @@ function VendorDashboard() {
             {activeTab === "analytics" && (
               <div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  
                   <div className="bg-white rounded-lg shadow-md p-6">
                     <h3 className="text-lg font-semibold mb-4">
                       Revenue Overview

@@ -21,7 +21,7 @@ function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderFilter, setOrderFilter] = useState("all");
   
-  // Modal states
+  // Modal
   const [showOrderDetailsModal, setShowOrderDetailsModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
@@ -38,7 +38,7 @@ function AdminDashboard() {
   });
   const navigate = useNavigate();
 
-  // Get admin name from email
+  
   const getAdminName = () => {
     if (auth.currentUser?.email) {
       const emailName = auth.currentUser.email.split('@')[0];
@@ -49,7 +49,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     fetchData();
-    // Refresh data every 30 seconds for real-time updates
+    // Refresh data every 30 seconds 
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -287,7 +287,7 @@ function AdminDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {/* Header */}
+        
         <div className="bg-white shadow-sm border-b px-6 py-4">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-800">
@@ -492,10 +492,10 @@ function AdminDashboard() {
             </div>
           )}
 
-    {/* Orders Tab - Added missing implementation */}
+    {/* Orders Tab */}
           {activeTab === "orders" && (
             <div>
-              {/* Search and Filter Controls */}
+              {/* Search and Filter*/}
               <div className="bg-white p-6 rounded-lg shadow-md mb-6">
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                   <div className="flex gap-4 items-center">

@@ -11,6 +11,7 @@ import AdminDashboard from "./Components/AdminDashboard";
 import RiderDashboard from "./Components/RiderDashboard";
 import Homepage from "./Components/Homepage";
 import ChatBot from "./Components/ChatBot";
+import MyAccount from "./Components/MyAccount";
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/vendor" element= {<VendorDashboard />} />
         <Route path="/rider" element= {<RiderDashboard />} />
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/myaccount" element={<MyAccount />} />
 
         <Route path="/" element={<Navigate to="/homepage" />} />
 

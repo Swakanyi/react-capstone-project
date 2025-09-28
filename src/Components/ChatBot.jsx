@@ -21,11 +21,11 @@ function ChatBot() {
     setInput("");
     setLoading(true);
 
-    // Add user message
+   
     setMessages(prev => [...prev, { role: "user", content: userMessage }]);
 
     try {
-      // Call OpenAI API
+      
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -67,7 +67,7 @@ function ChatBot() {
 
   return (
     <div>
-      {/* Floating button */}
+    
       <button
   onClick={() => setOpen(!open)}
   className="fixed bottom-5 right-10  hover:bg-blue-700 text-white p-4  shadow-lg transition-colors z-50"
@@ -89,7 +89,7 @@ function ChatBot() {
       {/* Chat window */}
       {open && (
         <div className="fixed bottom-20 right-5 w-80 bg-white shadow-2xl rounded-lg border border-gray-200 z-40">
-          {/* Header */}
+          
           <div className="bg-green-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">FreshBasket Assistant</h3>
             <div className="flex gap-2">
@@ -142,7 +142,7 @@ function ChatBot() {
             )}
           </div>
 
-          {/* Input */}
+          
           <div className="border-t border-gray-200 p-3">
             <div className="flex gap-2">
               <input

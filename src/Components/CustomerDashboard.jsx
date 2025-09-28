@@ -5,6 +5,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import video2 from "../assets/herovideo.mp4";
 import Footer from "./Footer";
+import Logo1 from "../assets/FreshBasket Logo with Fresh Greens and Sunny Yellows.png"
+
 
 function CustomerDashboard() {
   const [allProducts, setAllProducts] = useState([]);
@@ -26,7 +28,6 @@ const [deliveryAddress, setDeliveryAddress] = useState({
   postalCode: "",
   phoneNumber: ""
 });
-
   const navigate = useNavigate();
 
   // Get categories from products
@@ -137,7 +138,7 @@ const [deliveryAddress, setDeliveryAddress] = useState({
     setCart(updatedCart);
   };
 
-  // Calculate cart totals
+  // cart totals
   const getCartTotal = () => {
     return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   };
@@ -164,7 +165,7 @@ const [deliveryAddress, setDeliveryAddress] = useState({
       return;
     }
     
-     // Show address modal 
+     // address modal 
   setShowAddressModal(true);
 };
 
@@ -229,10 +230,11 @@ const completeOrder = async () => {
   return (
     <>
       
-      <div className="bg-green-800 text-white p-4 sticky top-0 z-50 shadow-lg">
+      <div className="bg-green-800 text-white p-2 sticky top-0 z-50 shadow-lg">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2 md:mb-0">
-            <span className="font-bold text-sm md:text-base">
+            
+            <span className="px-10 font-bold text-sm md:text-base">
               SAME DAY DELIVERY - Orders before 12:00PM
             </span>
             <span className="text-sm md:text-base">
@@ -241,8 +243,19 @@ const completeOrder = async () => {
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Cart Button with stock remaining */}
-            <button
+  
+  <button
+    onClick={() => navigate('/myaccount')}
+    className="text-white hover:text-green-200 transition-colors font-medium flex items-center gap-2"
+  >
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+    My Account
+  </button>
+
+  
+  <button
               onClick={() => setIsCartModalOpen(true)}
               className="relative bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition-colors flex items-center gap-2"
             >
@@ -257,18 +270,19 @@ const completeOrder = async () => {
               )}
             </button>
 
-            <button
-              onClick={handleLogout}
-              className="text-white hover:text-red-200 transition-colors font-medium"
-            >
-              Logout
-            </button>
-          </div>
+  
+  <button
+    onClick={handleLogout}
+    className="text-white hover:text-red-200 transition-colors font-medium"
+  >
+    Logout
+  </button>
+</div>
         </div>
       </div>
 
       {/* Categories Section */}
-      <div className="sticky top-16 z-40 mb-8 px-4 py-6 bg-gray-50 shadow-md border-b border-gray-200">
+      <div className="sticky top-16 z-40 mb-8 px-4 py-4 bg-gray-50 shadow-md border-b border-gray-200">
         <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
           Shop by Category
         </h2>
@@ -286,7 +300,7 @@ const completeOrder = async () => {
                 {category}
               </button>
 
-              {/* Subcategory Dropdown */}
+              {/* Subcategory*/}
               {getSubcategoriesForCategory(category).length > 0 && (
                 <div className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-lg border min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="py-2">
@@ -411,7 +425,7 @@ const completeOrder = async () => {
                     </div>
                   )}
                   
-                  {/* Stock section */}
+                  {/* Stock*/}
                   <div className="absolute top-2 right-2">
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       product.stock > 20
@@ -836,7 +850,7 @@ const completeOrder = async () => {
         </div>
       </div>
 
-      {/* Footer modal */}i
+      {/* Footer modal */}
       <div className="p-6 border-t">
         <div className="flex gap-3">
           <button
@@ -859,6 +873,7 @@ const completeOrder = async () => {
     </div>
   </div>
 )}
+
 
   <Footer />
     </>
