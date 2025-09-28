@@ -65,14 +65,14 @@ function RiderDashboard() {
 
     const todayEarnings = deliveredOrders
       .filter(order => new Date(order.updatedAt).toDateString() === today)
-      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0); 
+      .reduce((sum, order) => sum + (order.deliveryFee || 200), 0); 
 
     const weekEarnings = deliveredOrders
       .filter(order => new Date(order.updatedAt) >= weekAgo)
-      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0);
+      .reduce((sum, order) => sum + (order.deliveryFee || 200), 0);
 
     const totalEarnings = deliveredOrders
-      .reduce((sum, order) => sum + (order.deliveryFee || 100), 0);
+      .reduce((sum, order) => sum + (order.deliveryFee || 200), 0);
 
     setEarnings({
       today: todayEarnings,

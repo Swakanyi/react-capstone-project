@@ -840,7 +840,7 @@ const completeOrder = async () => {
             </div>
             <div className="flex justify-between">
               <span>Delivery Fee:</span>
-              <span>Ksh 50</span>
+              <span>Ksh 200</span>
             </div>
             <div className="flex justify-between font-bold text-lg border-t pt-2">
               <span>Total:</span>
