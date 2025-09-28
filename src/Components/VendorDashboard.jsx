@@ -3,6 +3,7 @@ import {
   auth,
   addProduct,
   updateProduct,
+  deleteProduct,
   getVendorProducts,
   getOrders,
   updateOrder,
